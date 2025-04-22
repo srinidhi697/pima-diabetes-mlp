@@ -1,87 +1,128 @@
-# 🤖 Pima Diabetes Classification using MLPs in Keras
+# Multi-Layer Perceptrons (MLPs) for Pima Diabetes and Iris Classification using Keras
 
-This project explores the design, evaluation, and optimization of **Multi-Layer Perceptrons (MLPs)** for classifying diabetes using the **Pima Indians Diabetes Dataset**. Built with **Keras**, the project also compares model variations and generalization performance using **cross-validation**.
+This project demonstrates the use of Multi-Layer Perceptrons (MLPs) built with Keras to perform classification tasks on two datasets:
 
----
+1. **Pima Indians Diabetes Dataset** (binary classification)
+2. **Iris Dataset** (multi-class classification)
 
-## 📊 Dataset Overview
-- Dataset: Pima Indians Diabetes
-- Samples: 768
-- Features: 8 numeric input features
-- Target: Binary classification (Diabetic / Non-Diabetic)
+The project explores both baseline and redesigned MLP architectures, compares performance, and analyzes generalization capabilities.
 
 ---
 
-## 🧠 Initial MLP Design
+## Dataset 1: Pima Indians Diabetes Dataset
 
-### 🏗️ Architecture
-- **Input Layer**: 8 neurons (1 per feature)
-- **Hidden Layers**:
-  - Layer 1: 16 neurons, ReLU activation
-  - Layer 2: 8 neurons, ReLU activation
-- **Output Layer**: 1 neuron with Sigmoid activation
+### Model 1: Baseline MLP
 
-### 🧪 Evaluation
-- **Training Accuracy**: 80%
-- **Validation Accuracy**: 75%
-- **Cross-Validation**: 10-fold
+**Architecture**
+- Input Layer: 8 features
+- Hidden Layers:
+  - Dense(16), ReLU
+  - Dense(8), ReLU
+- Output Layer: Dense(1), Sigmoid
 
-### 🔍 Observations
-- Slight overfitting observed due to a ~5% gap between training and evaluation.
-- Possible causes: small dataset, class imbalance, lack of regularization.
+**Compilation & Training**
+- Optimizer: Adam
+- Loss Function: Binary Crossentropy
+- Evaluation: Accuracy, Cross-validation
 
----
-
-## 🔁 MLP Comparison: Pima vs Iris
-
-| Dataset       | Eval Accuracy | Notes                                    |
-|---------------|---------------|------------------------------------------|
-| **Pima**      | 75–80%        | More complex, possibly imbalanced        |
-| **Iris**      | **94.12%**    | Simpler, well-separated, 3-class target  |
-
-📌 **Conclusion**: Simpler datasets (Iris) enable better generalization with smaller networks. Pima’s complexity requires better tuning and regularization.
+**Results**
+- Training Accuracy: 81.12%
+- Validation Accuracy: 75.88%
+- Cross-Validation Score (10-fold): 0.7422
+- Training Loss: 0.4618
+- Validation Loss: 0.7128
 
 ---
 
-## 🔧  Redesigned MLP for Pima
+### Model 2: Redesigned MLP
 
-### 🏗️ Architecture Changes
-- **First Hidden Layer**: Increased to 32 neurons
-- **Second Hidden Layer**: Increased to 16 neurons
+**Architecture**
+- Input Layer: 8 features
+- Hidden Layers:
+  - Dense(32), ReLU
+  - Dense(16), ReLU
+- Output Layer: Dense(1), Sigmoid
 
-### 📊 Evaluation Metrics
+**Results**
+- Training Accuracy: 85.03%
+- Validation Accuracy: 85.03%
+- Cross-Validation Score (10-fold): 0.6849
+- Training Loss: 0.3962
+- Validation Loss: 0.3962
 
-| Metric                  | Original MLP | Redesigned MLP |
-|-------------------------|--------------|----------------|
-| Training Accuracy       | 0.8112       | **0.8503**     |
-| Validation Accuracy     | 0.7588       | **0.8503**     |
-| Training Loss           | 0.4618       | **0.3962**     |
-| Validation Loss         | 0.7128       | **0.3962**     |
-| Cross-Validation (10F)  | **0.7422**   | 0.6849         |
-
-### 📌 Insights
-- Redesigned model **improved accuracy and reduced loss**, showing better learning.
-- However, **lower cross-validation** score suggests inconsistent generalization across data splits.
-- Highlights the importance of regularization and hyperparameter tuning.
-
----
-
-## 🚀 Recommendations
-- Add **dropout or L2 regularization** to reduce overfitting
-- Explore **data resampling techniques** for class imbalance
-- Use **GridSearchCV** for hyperparameter tuning
-- Investigate **ensemble methods** to stabilize performance
-- Consider **model checkpointing** and **early stopping**
+**Insights**
+- The redesigned model demonstrated better accuracy and lower loss.
+- However, lower cross-validation suggests some instability across different subsets of the data.
 
 ---
 
-## 🛠️ Tools & Libraries
+## Dataset 2: Iris Dataset
+
+### Model 1: Baseline MLP
+
+**Architecture**
+- Input Layer: 4 features
+- Hidden Layer: Dense(8), ReLU
+- Output Layer: Dense(3), Softmax
+
+**Compilation & Training**
+- Optimizer: Adam
+- Loss Function: Categorical Crossentropy
+
+**Results**
+- Training Accuracy: ~100%
+- Validation Accuracy: ~100%
+- Test Accuracy: 94.12%
+- Test Loss: 0.2683
+
+---
+
+### Model 2: Redesigned MLP
+
+**Architecture**
+- Input Layer: 4 features
+- Hidden Layers:
+  - Dense(8), ReLU
+  - Dense(8), ReLU
+- Output Layer: Dense(3), Softmax
+
+**Results**
+- Training Accuracy: ~100%
+- Validation Accuracy: ~100%
+- Test Accuracy: 100%
+- Test Loss: 0.1197
+
+**Insights**
+- Adding an extra hidden layer improved test accuracy from 94.12% to 100%.
+- Test loss significantly dropped, indicating better performance and generalization.
+
+---
+
+## Comparative Summary
+
+| Dataset | Model         | Accuracy | Test Loss | Hidden Layers |
+|---------|---------------|----------|-----------|----------------|
+| Pima    | Baseline MLP  | 75.88%   | 0.7128    | 2 (16, 8)       |
+| Pima    | Redesigned MLP| 85.03%   | 0.3962    | 2 (32, 16)      |
+| Iris    | Baseline MLP  | 94.12%   | 0.2683    | 1 (8)           |
+| Iris    | Redesigned MLP| 100%     | 0.1197    | 2 (8, 8)        |
+
+**Observations**
+- The Iris dataset is simpler, allowing MLPs to reach near-perfect performance even with fewer layers.
+- The Pima dataset is more complex and benefits from deeper models, though cross-validation scores suggest potential overfitting risks.
+- Adding layers improves accuracy and reduces loss, but model complexity must be balanced with the size and difficulty of the dataset.
+
+---
+
+## Tools Used
+
 - Python 3.x
-- Keras / TensorFlow
+- Keras with TensorFlow backend
 - Scikit-learn
 - NumPy, Matplotlib
 
-## 📌 Conclusion
+---
 
-This project demonstrates how **MLP architecture design** and **dataset characteristics** impact model performance. While deeper networks can enhance accuracy, **generalization** still depends on balanced data, proper regularization, and careful tuning.
+## Conclusion
 
+This project illustrates how model architecture impacts performance in neural networks. Simpler datasets may not require complex models, while more intricate datasets benefit from deeper architectures and regularization. Proper evaluation using validation and cross-validation is critical to ensure reliable generalization.
